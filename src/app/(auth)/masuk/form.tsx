@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
+import { IsianSandi } from "@/components/isian-sandi";
 import { aksiMasuk } from "@/actions/autentikasi";
 import { Bidang, Isian, Pesan, Tombol } from "@/components/ui/dasar";
 
@@ -24,7 +25,7 @@ export function FormMasuk({ lanjut }: { lanjut: string }) {
       </Bidang>
 
       <Bidang label="Kata sandi" wajib>
-        <Isian name="sandi" type="password" autoComplete="current-password" required placeholder="••••••••" />
+        <IsianSandi name="sandi" autoComplete="current-password" required placeholder="••••••••" />
       </Bidang>
 
       <div className="flex justify-end">

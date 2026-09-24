@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
+import { IsianSandi } from "@/components/isian-sandi";
 import { aksiDaftar } from "@/actions/autentikasi";
 import { Bidang, Isian, Pesan, Tombol } from "@/components/ui/dasar";
 
@@ -35,11 +36,11 @@ export function FormDaftar() {
       </Bidang>
 
       <Bidang label="Kata sandi" petunjuk="Minimal 8 karakter. Gunakan kombinasi huruf dan angka." wajib>
-        <Isian name="sandi" type="password" required minLength={8} autoComplete="new-password" placeholder="••••••••" />
+        <IsianSandi name="sandi" required minLength={8} autoComplete="new-password" placeholder="••••••••" />
       </Bidang>
 
       <Bidang label="Ulangi kata sandi" wajib>
-        <Isian name="ulangi" type="password" required minLength={8} autoComplete="new-password" placeholder="••••••••" />
+        <IsianSandi name="ulangi" required minLength={8} autoComplete="new-password" placeholder="••••••••" />
       </Bidang>
 
       <label className="flex cursor-pointer items-start gap-3 rounded-lg border border-slate-200 p-3.5 text-sm hover:bg-slate-50">
