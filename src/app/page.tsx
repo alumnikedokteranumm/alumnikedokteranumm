@@ -5,9 +5,111 @@ import { ambilStatistik, ambilBerita, ambilAcara } from "@/lib/data";
 import { ambilPengaturan, ambilSesi } from "@/lib/sesi";
 import { SUPABASE_SIAP } from "@/lib/konfig";
 import { DAFTAR_SOSMED, DeretSosmed } from "@/components/sosmed";
-import { angka, tanggalSingkat, tanggalJam, waktuRelatif } from "@/lib/format";
+import { angka, tanggal, tanggalJam, waktuRelatif } from "@/lib/format";
 
 export const revalidate = 300;
+
+/* ---------- Kartu gaya majalah: 1 sorotan besar + kartu mendatar di sampingnya ---------- */
+type ItemSorotan = {
+  id: string; href: string; judul: string; gambar: string | null; tanggal: string;
+  ringkasan?: string | null; label?: React.ReactNode; tanggalKotak?: Date;
+};
+
+const BULAN_PENDEK = ["JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGU", "SEP", "OKT", "NOV", "DES"];
+
+function GambarKartu({ item, besar }: { item: ItemSorotan; besar?: boolean }) {
+  if (item.gambar) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img src={item.gambar} alt="" loading="lazy"
+        className="size-full object-cover transition-transform duration-500 group-hover:scale-[1.04]" />
+    );
+  }
+  // Tanpa gambar: blok biru dongker berisi tanggal (agenda) atau lambang (berita)
+  const t = item.tanggalKotak && new Date(item.tanggalKotak.getTime() + 7 * 3600_000);
+  return (
+    <div className="pola-hero grid size-full place-items-center bg-merek-800 text-white">
+      {t ? (
+        <div className="text-center leading-none">
+          <p className={`font-serif font-bold ${besar ? "text-6xl" : "text-4xl"}`}>{t.getUTCDate()}</p>
+          <p className={`mt-2 font-semibold tracking-[0.25em] text-emas-300 ${besar ? "text-base" : "text-xs"}`}>
+            {BULAN_PENDEK[t.getUTCMonth()]} {t.getUTCFullYear()}
+          </p>
+        </div>
+      ) : (
+        <Image src="/logo-256.png" alt="" width={256} height={256} className={`opacity-90 ${besar ? "size-24" : "size-14"}`} />
+      )}
+    </div>
+  );
+}
+
+function IkonJam() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-4 shrink-0 text-merek-700" fill="currentColor" aria-hidden>
+      <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm1 5v4.6l3.2 1.9-.8 1.3L11 12.4V7h2Z" />
+    </svg>
+  );
+}
+
+function BacaSelengkapnya({ teks }: { teks: string }) {
+  return (
+    <span className="mt-4 inline-flex items-center gap-2 whitespace-nowrap text-xs font-semibold uppercase tracking-[0.15em] text-merek-700">
+      {teks}
+      <span aria-hidden className="transition-transform group-hover:translate-x-1">→</span>
+    </span>
+  );
+}
+
+function GridSorotan({ items, teksBaca }: { items: ItemSorotan[]; teksBaca: string }) {
+  const [utama, ...lain] = items;
+  return (
+    <div className="grid gap-8 lg:grid-cols-3">
+      <Link href={utama.href} className="group block">
+        <article>
+          <div className="aspect-[16/10] overflow-hidden rounded-xl bg-slate-100">
+            <GambarKartu item={utama} besar />
+          </div>
+          <div className="px-1 pt-5">
+            {utama.label && <div className="mb-2.5 flex flex-wrap gap-1.5">{utama.label}</div>}
+            <h3 className="font-serif text-2xl font-bold leading-snug text-merek-900 group-hover:text-merek-700">{utama.judul}</h3>
+            <p className="mt-3 flex items-center gap-2 text-sm text-slate-600"><IkonJam />{utama.tanggal}</p>
+            {utama.ringkasan && <p className="mt-3 line-clamp-3 text-[15px] leading-relaxed text-slate-600">{utama.ringkasan}</p>}
+            <BacaSelengkapnya teks={teksBaca} />
+          </div>
+        </article>
+      </Link>
+
+      {lain.length > 0 && (
+        <div className="grid content-start gap-8 sm:grid-cols-2 lg:col-span-2">
+          {lain.map((it) => (
+            <Link key={it.id} href={it.href} className="group block">
+              <article className="grid grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] gap-4">
+                <div className="aspect-[4/3.6] overflow-hidden rounded-xl bg-slate-100">
+                  <GambarKartu item={it} />
+                </div>
+                <div className="min-w-0">
+                  {it.label && <div className="mb-2 flex flex-wrap gap-1">{it.label}</div>}
+                  <h3 className="line-clamp-4 font-serif text-lg font-bold leading-snug text-merek-900 group-hover:text-merek-700">{it.judul}</h3>
+                  <p className="mt-2.5 flex items-center gap-1.5 text-[13px] text-slate-600"><IkonJam />{it.tanggal}</p>
+                  <BacaSelengkapnya teks={teksBaca} />
+                </div>
+              </article>
+            </Link>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function JudulBagian({ atas, judul }: { atas: string; judul: string }) {
+  return (
+    <div className="mb-12 text-center">
+      <p className="text-xs font-semibold uppercase tracking-[0.35em] text-merek-600">{atas}</p>
+      <h2 className="mt-3 font-serif text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl">{judul}</h2>
+    </div>
+  );
+}
 
 function LambangHero({ ukuran }: { ukuran: string }) {
   return (
@@ -24,8 +126,8 @@ function LambangHero({ ukuran }: { ukuran: string }) {
 export default async function Beranda() {
   const [stat, berita, agenda, p, sesi] = await Promise.all([
     ambilStatistik(),
-    ambilBerita(3),
-    ambilAcara({ mendatang: true, batas: 3 }),
+    ambilBerita(5),
+    ambilAcara({ mendatang: true, batas: 5 }),
     ambilPengaturan(),
     ambilSesi(),
   ]);
@@ -170,60 +272,38 @@ export default async function Beranda() {
 
       {/* ---------------------------------------------------------- AGENDA */}
       {agenda.length > 0 && (
-        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
-          <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-merek-600">Jangan sampai terlewat</p>
-              <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight text-slate-900">Agenda Terdekat</h2>
-            </div>
-            <Link href="/agenda" className="text-sm font-medium text-merek-700 hover:underline">Lihat semua agenda →</Link>
-          </div>
-
-          <div className="grid gap-5 md:grid-cols-3">
-            {agenda.map((a) => (
-              <Link key={a.id} href={`/agenda/${a.slug}`} className="group">
-                <Kartu className="flex h-full flex-col p-6 transition-all hover:-translate-y-0.5 hover:border-merek-300 hover:shadow-md">
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Lencana warna="hijau">{a.jenis}</Lencana>
-                    {a.daring && <Lencana warna="biru">Daring</Lencana>}
-                    {a.skp_idi && <Lencana warna="emas">{a.skp_idi} SKP</Lencana>}
-                  </div>
-                  <h3 className="mt-3.5 text-base font-semibold leading-snug text-slate-900 group-hover:text-merek-700">
-                    {a.judul}
-                  </h3>
-                  <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">{a.deskripsi}</p>
-                  <div className="mt-auto pt-4 text-sm">
-                    <p className="font-medium text-slate-700">{tanggalJam(a.mulai)}</p>
-                    <p className="mt-0.5 text-slate-500">{a.lokasi} · {waktuRelatif(a.mulai)}</p>
-                  </div>
-                </Kartu>
-              </Link>
-            ))}
+        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <JudulBagian atas="Jangan sampai terlewat" judul="Agenda Terdekat" />
+          <GridSorotan teksBaca="Lihat detail" items={agenda.map((a) => ({
+            id: a.id, href: `/agenda/${a.slug}`, judul: a.judul, gambar: a.poster_url,
+            tanggal: `${tanggalJam(a.mulai)} · ${waktuRelatif(a.mulai)}`,
+            ringkasan: [a.lokasi, a.deskripsi].filter(Boolean).join(" — "),
+            tanggalKotak: new Date(a.mulai),
+            label: (
+              <>
+                <Lencana warna="hijau">{a.jenis}</Lencana>
+                {a.daring && <Lencana warna="biru">Daring</Lencana>}
+                {a.skp_idi && <Lencana warna="emas">{a.skp_idi} SKP</Lencana>}
+              </>
+            ),
+          }))} />
+          <div className="mt-12 text-center">
+            <TautanTombol href="/agenda" varian="garis" className="px-6">Lihat semua agenda →</TautanTombol>
           </div>
         </section>
       )}
 
       {/* ---------------------------------------------------------- BERITA */}
       {berita.length > 0 && (
-        <section className="border-y border-slate-200 bg-white py-16">
+        <section className="border-y border-slate-200 bg-white py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
-              <h2 className="font-serif text-3xl font-bold tracking-tight text-slate-900">Kabar Terbaru</h2>
-              <Link href="/berita" className="text-sm font-medium text-merek-700 hover:underline">Semua berita →</Link>
-            </div>
-            <div className="grid gap-8 md:grid-cols-3">
-              {berita.map((b) => (
-                <Link key={b.id} href={`/berita/${b.slug}`} className="group">
-                  <article>
-                    <Lencana warna="netral">{b.kategori}</Lencana>
-                    <h3 className="mt-3 font-serif text-lg font-bold leading-snug text-slate-900 group-hover:text-merek-700">
-                      {b.judul}
-                    </h3>
-                    <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">{b.ringkasan}</p>
-                    <p className="mt-3 text-xs text-slate-400">{tanggalSingkat(b.terbit_pada)}</p>
-                  </article>
-                </Link>
-              ))}
+            <JudulBagian atas="Kabar alumni" judul="Berita Terbaru" />
+            <GridSorotan teksBaca="Baca selengkapnya" items={berita.map((b) => ({
+              id: b.id, href: `/berita/${b.slug}`, judul: b.judul, gambar: b.sampul_url,
+              tanggal: tanggal(b.terbit_pada), ringkasan: b.ringkasan,
+            }))} />
+            <div className="mt-12 text-center">
+              <TautanTombol href="/berita" varian="garis" className="px-6">Semua berita →</TautanTombol>
             </div>
           </div>
         </section>
