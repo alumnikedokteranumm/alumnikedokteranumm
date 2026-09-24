@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { TautanTombol, Kartu, Lencana, Pesan } from "@/components/ui/dasar";
-import { ambilStatistik, ambilBerita, ambilAcara } from "@/lib/data";
+import { ambilStatistik, ambilBerita, ambilAcara, ambilPengurus } from "@/lib/data";
 import { ambilPengaturan, ambilSesi } from "@/lib/sesi";
 import { SUPABASE_SIAP } from "@/lib/konfig";
 import { DAFTAR_SOSMED, DeretSosmed } from "@/components/sosmed";
@@ -124,13 +124,17 @@ function LambangHero({ ukuran }: { ukuran: string }) {
 
 
 export default async function Beranda() {
-  const [stat, berita, agenda, p, sesi] = await Promise.all([
+  const [stat, berita, agenda, p, sesi, pengurus] = await Promise.all([
     ambilStatistik(),
     ambilBerita(5),
     ambilAcara({ mendatang: true, batas: 5 }),
     ambilPengaturan(),
     ambilSesi(),
+    ambilPengurus(),
   ]);
+  // Foto sambutan: dari Pengaturan Situs, atau foto Ketua Umum di menu Pengurus
+  const fotoKetua = p.sambutan_foto?.trim() ||
+    pengurus.find((x) => /ketua umum/i.test(x.jabatan) && x.foto_url)?.foto_url || null;
 
   const angkaSorot = [
     { nilai: stat.total_alumni,   label: "Alumni terdata",      imbuhan: "" },
@@ -209,20 +213,33 @@ export default async function Beranda() {
       {/* -------------------------------------------------------- SAMBUTAN */}
       {p.sambutan_isi && (
         <section className="bg-white py-20">
-          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-            <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-merek-50/70 to-white p-8 sm:p-12">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-merek-600">
-                {p.sambutan_judul || "Sambutan Ketua Umum"}
-              </p>
-              <blockquote className="mt-5 font-serif text-lg leading-[1.85] text-slate-700">
-                {p.sambutan_isi}
-              </blockquote>
-              {p.sambutan_nama && (
-                <p className="mt-6 border-t border-slate-200 pt-5 text-sm font-semibold text-slate-900">
-                  {p.sambutan_nama}
-                  <span className="mt-0.5 block font-normal text-slate-500">Ketua Umum Alumni Kedokteran UMM</span>
-                </p>
+          <div className={`mx-auto px-4 sm:px-6 lg:px-8 ${fotoKetua ? "max-w-5xl" : "max-w-4xl"}`}>
+            <div className={`relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-merek-50 to-white ${
+              fotoKetua ? "md:grid md:grid-cols-[minmax(0,19rem)_minmax(0,1fr)]" : ""}`}>
+              {fotoKetua && (
+                <div className="relative h-80 bg-merek-100 md:h-auto md:min-h-full">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={fotoKetua} alt={p.sambutan_nama || "Ketua Umum"}
+                    className="absolute inset-0 size-full object-cover object-top" />
+                  {/* gradasi agar foto melebur ke latar kotak sambutan */}
+                  <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-merek-50 to-transparent md:inset-y-0 md:left-auto md:right-0 md:h-auto md:w-28 md:bg-gradient-to-l" aria-hidden />
+                </div>
               )}
+              <div className={`relative p-8 sm:p-12 ${fotoKetua ? "md:pl-6" : ""}`}>
+                <span className="pointer-events-none absolute right-6 top-2 select-none font-serif text-[9rem] leading-none text-emas-400/25" aria-hidden>&rdquo;</span>
+                <p className="relative text-xs font-semibold uppercase tracking-[0.14em] text-merek-600">
+                  {p.sambutan_judul || "Sambutan Ketua Umum"}
+                </p>
+                <blockquote className="relative mt-5 font-serif text-lg leading-[1.85] text-slate-700">
+                  {p.sambutan_isi}
+                </blockquote>
+                {p.sambutan_nama && (
+                  <p className="relative mt-6 border-t border-slate-200 pt-5 text-sm font-semibold text-slate-900">
+                    {p.sambutan_nama}
+                    <span className="mt-0.5 block font-normal text-slate-500">Ketua Umum Alumni Kedokteran UMM</span>
+                  </p>
+                )}
+              </div>
             </div>
           </div>
         </section>

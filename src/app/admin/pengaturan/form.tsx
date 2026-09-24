@@ -4,24 +4,27 @@ import { useActionState } from "react";
 import { useFormStatus } from "react-dom";
 import { simpanPengaturan } from "@/actions/admin";
 import { AreaTeks, Bidang, Isian, Kartu, Pesan, Tombol } from "@/components/ui/dasar";
+import { IsianGambar } from "@/components/unggah-gambar";
 
 const GRUP = [
   { judul: "Identitas", kunci: ["nama_organisasi", "singkatan", "tagline"] },
   { judul: "Kontak", kunci: ["alamat", "email", "email_kampus", "telepon", "whatsapp"] },
   { judul: "Media sosial", kunci: ["instagram", "youtube", "tiktok", "facebook", "linkedin", "x"] },
-  { judul: "Beranda — sambutan", kunci: ["sambutan_judul", "sambutan_nama", "sambutan_isi"] },
+  { judul: "Beranda — sambutan", kunci: ["sambutan_judul", "sambutan_nama", "sambutan_foto", "sambutan_isi"] },
   { judul: "Halaman Tentang", kunci: ["tentang_sejarah", "tentang_visi", "tentang_misi"] },
   { judul: "Halaman Donasi", kunci: ["donasi_catatan"] },
 ];
 const LABEL_CADANGAN: Record<string, string> = {
-  email_kampus: "Email resmi kampus", tiktok: "TikTok", linkedin: "LinkedIn", x: "X (Twitter)",
+  email_kampus: "Email resmi kampus", sambutan_foto: "Foto ketua umum", tiktok: "TikTok", linkedin: "LinkedIn", x: "X (Twitter)",
 };
 const MEDSOS = "Boleh tautan lengkap atau cukup nama akun, contoh: @alumnikedokteranumm. Kosongkan bila tidak punya — ikonnya tidak akan tampil.";
 const PETUNJUK: Record<string, string> = {
   tentang_misi: "Pisahkan setiap butir misi dengan titik koma ( ; )",
+  sambutan_foto: "Foto setengah badan, tegak (portrait), latar polos lebih baik. Tampil menyatu di kiri kotak sambutan. Bila kosong, dipakai foto Ketua Umum dari menu Pengurus.",
   whatsapp: "Nomor narahubung, contoh 0812xxxxxxx. Akan menjadi tombol chat WhatsApp di halaman Kontak.",
   instagram: MEDSOS, youtube: MEDSOS, tiktok: MEDSOS, facebook: MEDSOS, linkedin: MEDSOS, x: MEDSOS,
 };
+const GAMBAR = new Set(["sambutan_foto"]);
 const PANJANG = new Set(["sambutan_isi", "tentang_sejarah", "tentang_visi", "tentang_misi", "alamat", "donasi_catatan"]);
 
 function Simpan() {
@@ -44,8 +47,9 @@ export function FormPengaturan({ baris }: { baris: { kunci: string; nilai: strin
             {g.kunci.map((k) => {
               const b = peta.get(k);
               return (
-                <Bidang key={k} label={b?.keterangan || LABEL_CADANGAN[k] || k} petunjuk={PETUNJUK[k]}>
-                  {PANJANG.has(k)
+                <Bidang key={k} label={b?.keterangan || LABEL_CADANGAN[k] || k} petunjuk={PETUNJUK[k]} grup={GAMBAR.has(k)}>
+                  {GAMBAR.has(k) ? <IsianGambar nama={`p_${k}`} awal={b?.nilai || null} folder="pengaturan" />
+                    : PANJANG.has(k)
                     ? <AreaTeks name={`p_${k}`} defaultValue={b?.nilai ?? ""} />
                     : <Isian name={`p_${k}`} defaultValue={b?.nilai ?? ""} />}
                 </Bidang>
