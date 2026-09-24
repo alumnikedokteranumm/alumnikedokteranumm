@@ -1,0 +1,7 @@
+# Jangan pernah mengunggah file kunci — isinya diatur lewat Environment Variables di Vercel
+.env
+.env.*
+!.env.example
+node_modules
+.next
+.DS_Store

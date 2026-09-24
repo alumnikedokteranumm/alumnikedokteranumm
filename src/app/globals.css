@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+/* "inline" supaya var() dari next/font dibaca saat dipakai, bukan saat didefinisikan */
+@theme inline {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-serif: var(--font-lora), ui-serif, Georgia, serif;
+}
+
+@theme {
+
+  /* Biru dongker — membuat merah-kuning lambang tampak menyala; dipadu emas sebagai aksen */
+  --color-merek-50:  #eff4fc;
+  --color-merek-100: #dce6f7;
+  --color-merek-200: #bccfee;
+  --color-merek-300: #8eaee0;
+  --color-merek-400: #5f86ce;
+  --color-merek-500: #3d66b8;
+  --color-merek-600: #2c4f9b;
+  --color-merek-700: #22407f;
+  --color-merek-800: #1c3466;
+  --color-merek-900: #172a52;
+  --color-merek-950: #0d1a36;
+
+  --color-emas-300: #f3cf6b;
+  --color-emas-400: #eab53a;
+  --color-emas-500: #d49a1c;
+  --color-emas-600: #b17d10;
+}
+
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+body {
+  background: #f8fafd;
+  color: var(--color-slate-800);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Pola halus untuk bagian hero */
+.pola-hero {
+  background-image:
+    radial-gradient(circle at 18% 12%, rgba(255,255,255,.10) 0, transparent 45%),
+    radial-gradient(circle at 82% 50%, rgba(234,181,58,.22) 0, transparent 42%);
+}
+
+/* Aksesibilitas: cincin fokus yang jelas untuk pengguna keyboard */
+:focus-visible {
+  outline: 2px solid var(--color-merek-600);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media print {
+  .tanpa-cetak { display: none !important; }
+}

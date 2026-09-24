@@ -1,0 +1,268 @@
+import Image from "next/image";
+import Link from "next/link";
+import { TautanTombol, Kartu, Lencana, Pesan } from "@/components/ui/dasar";
+import { ambilStatistik, ambilBerita, ambilAcara } from "@/lib/data";
+import { ambilPengaturan, ambilSesi } from "@/lib/sesi";
+import { SUPABASE_SIAP } from "@/lib/konfig";
+import { DAFTAR_SOSMED, DeretSosmed } from "@/components/sosmed";
+import { angka, tanggalSingkat, tanggalJam, waktuRelatif } from "@/lib/format";
+
+export const revalidate = 300;
+
+function LambangHero({ ukuran }: { ukuran: string }) {
+  return (
+    <div className="relative mx-auto">
+      {/* cahaya emas lembut di belakang lambang */}
+      <div className="absolute inset-4 rounded-full bg-emas-400/30 blur-3xl" aria-hidden />
+      <Image src="/logo-512.png" alt="Lambang Alumni Kedokteran UMM" width={512} height={512} priority
+        className={`relative drop-shadow-[0_20px_40px_rgba(0,0,0,0.35)] ${ukuran}`} />
+    </div>
+  );
+}
+
+
+export default async function Beranda() {
+  const [stat, berita, agenda, p, sesi] = await Promise.all([
+    ambilStatistik(),
+    ambilBerita(3),
+    ambilAcara({ mendatang: true, batas: 3 }),
+    ambilPengaturan(),
+    ambilSesi(),
+  ]);
+
+  const angkaSorot = [
+    { nilai: stat.total_alumni,   label: "Alumni terdata",      imbuhan: "" },
+    { nilai: stat.total_angkatan, label: "Angkatan",            imbuhan: "" },
+    { nilai: stat.total_spesialis,label: "Dokter spesialis",    imbuhan: "" },
+    { nilai: stat.total_kota,     label: "Kota tempat mengabdi",imbuhan: "" },
+  ];
+
+  return (
+    <>
+      {!SUPABASE_SIAP && (
+        <div className="mx-auto max-w-7xl px-4 pt-6 sm:px-6 lg:px-8">
+          <Pesan jenis="ingat" judul="Website berjalan, tapi database belum tersambung">
+            Buka berkas <code className="font-mono">PANDUAN.md</code> di folder proyek, ikuti
+            Langkah 2 untuk membuat proyek Supabase gratis dan menyalin dua kunci ke berkas{" "}
+            <code className="font-mono">.env.local</code>. Setelah itu semua data akan muncul di sini.
+          </Pesan>
+        </div>
+      )}
+
+      {/* ------------------------------------------------------------ HERO */}
+      <section className="pola-hero relative overflow-hidden bg-merek-900 text-white">
+        <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_auto] lg:gap-16 lg:px-8 lg:py-24">
+          <div className="order-last max-w-3xl text-center lg:order-first lg:text-left">
+            <span className="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-emas-400 ring-1 ring-emas-400/30">
+              Portal Resmi Alumni
+            </span>
+            <h1 className="mt-5 font-serif text-4xl font-bold leading-[1.15] tracking-tight sm:text-5xl lg:text-6xl">
+              {p.tagline || "Merawat Silaturahmi, Menguatkan Pengabdian"}
+            </h1>
+            <p className="mx-auto mt-6 max-w-2xl text-lg leading-relaxed text-merek-100 lg:mx-0">
+              Rumah digital {p.nama_organisasi || "Alumni Kedokteran UMM"}.
+              Satu tempat untuk menemukan sejawat, mengikuti agenda ilmiah, membaca peluang karier,
+              dan berkontribusi bagi almamater.
+            </p>
+            <div className="mt-9 flex flex-wrap justify-center gap-3 lg:justify-start">
+              {sesi.user ? (
+                <TautanTombol href="/direktori" varian="kedua" className="px-6 py-3 text-base">
+                  Buka Direktori Alumni
+                </TautanTombol>
+              ) : (
+                <TautanTombol href="/daftar" varian="kedua" className="px-6 py-3 text-base">
+                  Daftar Keanggotaan
+                </TautanTombol>
+              )}
+              <TautanTombol href="/tentang" varian="garis"
+                className="border-white/25 bg-white/5 px-6 py-3 text-base text-white hover:bg-white/10">
+                Tentang Kami
+              </TautanTombol>
+            </div>
+          </div>
+          <LambangHero ukuran="size-44 sm:size-56 lg:size-80" />
+        </div>
+      </section>
+
+      {/* ------------------------------------------------------- STATISTIK */}
+      {/* Disembunyikan sampai ada alumni terverifikasi, supaya tidak tampil "0" saat baru diluncurkan */}
+      {stat.total_alumni > 0 && (
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto grid max-w-7xl grid-cols-2 px-4 sm:px-6 lg:grid-cols-4 lg:divide-x lg:divide-slate-200 lg:px-8">
+          {angkaSorot.map((a) => (
+            <div key={a.label} className="bg-white px-2 py-8 text-center">
+              <p className="font-serif text-4xl font-bold text-merek-800">
+                {angka(a.nilai)}{a.imbuhan}
+              </p>
+              <p className="mt-1.5 text-sm text-slate-600">{a.label}</p>
+            </div>
+          ))}
+        </div>
+        <p className="pb-6 text-center text-xs text-slate-400">
+          Angka agregat dari profil alumni terverifikasi. Tidak ada data pribadi yang ditampilkan di halaman publik.
+        </p>
+      </section>
+      )}
+
+      {/* --------------------------------------------------------- LAYANAN */}
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-merek-600">Apa yang bisa kamu lakukan</p>
+          <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight text-slate-900">
+            Layanan untuk alumni
+          </h2>
+        </div>
+
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { href: "/direktori", judul: "Direktori Alumni", teks: "Cari sejawat berdasarkan angkatan, kota, atau bidang spesialisasi. Tertutup — hanya untuk alumni terverifikasi.", ikon: "M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7Z", kunci: true },
+            { href: "/video", judul: "Video Edukasi", teks: "Rekaman webinar, kuliah tamu, dan materi keterampilan klinis untuk belajar kapan saja.", ikon: "M15 10l4.55-2.28A1 1 0 0 1 21 8.62v6.76a1 1 0 0 1-1.45.9L15 14M5 18h8a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2Z", kunci: true },
+            { href: "/dokumen", judul: "Dokumen Penting", teks: "Unduh sertifikat akreditasi, SK, pedoman, dan formulir resmi dalam format PDF.", ikon: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M12 18v-6M9 15l3 3 3-3", kunci: true },
+            { href: "/agenda", judul: "Agenda Ilmiah", teks: "Seminar, webinar ber-SKP, workshop, dan temu alumni. Lengkap dengan tautan pendaftaran.", ikon: "M8 2v4M16 2v4M3 10h18M5 6h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" },
+            { href: "/karier", judul: "Karier & Beasiswa", teks: "Lowongan dokter umum dan spesialis, program PPDS, serta informasi beasiswa pendidikan lanjut.", ikon: "M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2ZM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" },
+            { href: "/tracer-study", judul: "Tracer Study", teks: "Kuesioner singkat yang menjadi dasar akreditasi LAM-PTKes dan perbaikan kurikulum FK UMM.", ikon: "M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11", kunci: true },
+            { href: "/mentoring", judul: "Mentoring Alumni", teks: "Ngobrol 30 menit dengan senior soal pilihan spesialis, PPDS, buka praktik, atau karier non-klinis.", ikon: "M17 20h5v-2a3 3 0 0 0-5.36-1.86M17 20H7m10 0v-2c0-.66-.13-1.28-.36-1.86M7 20H2v-2a3 3 0 0 1 5.36-1.86M7 20v-2c0-.66.13-1.28.36-1.86m0 0a5 5 0 0 1 9.28 0M15 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z", kunci: true },
+            { href: "/skp", judul: "Webinar & SKP", teks: "Daftar webinar, isi presensi dan kuis, lalu unduh sertifikat ber-SKP. Riwayat SKP-mu tercatat rapi.", ikon: "M12 14l9-5-9-5-9 5 9 5Zm0 0v6m-5-8.2V17l5 3 5-3v-5.2" },
+            { href: "/pustaka", judul: "Perpustakaan Digital", teks: "Jurnal, pedoman klinis, dan kalkulator klinis gratis yang dikurasi pengurus dalam satu halaman.", ikon: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15Z", kunci: true },
+            { href: "/arsip-lulusan", judul: "Arsip Lulusan", teks: "Daftar lulusan FK UMM per tahun sejak angkatan pertama. Lihat siapa teman seangkatan yang sudah bergabung.", ikon: "M21 8v13H3V8M1 3h22v5H1zM10 12h4", kunci: true },
+            { href: "/donasi", judul: "Iuran & Donasi", teks: "Bayar iuran, konfirmasi transfer dengan bukti, dan pantau laporan keuangan yang terbuka.", ikon: "M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.7 1.1-1a5.5 5.5 0 0 0 0-7.9Z" },
+            { href: "/berita", judul: "Kabar Almamater", teks: "Berita kegiatan, prestasi alumni, dan pengumuman resmi dari pengurus Alumni Kedokteran UMM.", ikon: "M4 4h16v16H4zM8 8h8M8 12h8M8 16h5" },
+          ].map((k) => (
+            <Link key={k.href} href={k.href} className="group">
+              <Kartu className="h-full p-6 transition-all hover:-translate-y-0.5 hover:border-merek-300 hover:shadow-md">
+                <div className="flex items-start justify-between">
+                  <span className="grid size-11 place-items-center rounded-lg bg-merek-50 text-merek-700">
+                    <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                      <path d={k.ikon} />
+                    </svg>
+                  </span>
+                  {k.kunci && <Lencana warna="netral">Khusus alumni</Lencana>}
+                </div>
+                <h3 className="mt-4 text-base font-semibold text-slate-900 group-hover:text-merek-700">{k.judul}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{k.teks}</p>
+              </Kartu>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* -------------------------------------------------------- SAMBUTAN */}
+      {p.sambutan_isi && (
+        <section className="bg-white py-20">
+          <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div className="rounded-2xl border border-slate-200 bg-gradient-to-br from-merek-50/70 to-white p-8 sm:p-12">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-merek-600">
+                {p.sambutan_judul || "Sambutan Ketua Umum"}
+              </p>
+              <blockquote className="mt-5 font-serif text-lg leading-[1.85] text-slate-700">
+                {p.sambutan_isi}
+              </blockquote>
+              {p.sambutan_nama && (
+                <p className="mt-6 border-t border-slate-200 pt-5 text-sm font-semibold text-slate-900">
+                  {p.sambutan_nama}
+                  <span className="mt-0.5 block font-normal text-slate-500">Ketua Umum Alumni Kedokteran UMM</span>
+                </p>
+              )}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ---------------------------------------------------------- AGENDA */}
+      {agenda.length > 0 && (
+        <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-merek-600">Jangan sampai terlewat</p>
+              <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight text-slate-900">Agenda Terdekat</h2>
+            </div>
+            <Link href="/agenda" className="text-sm font-medium text-merek-700 hover:underline">Lihat semua agenda →</Link>
+          </div>
+
+          <div className="grid gap-5 md:grid-cols-3">
+            {agenda.map((a) => (
+              <Link key={a.id} href={`/agenda/${a.slug}`} className="group">
+                <Kartu className="flex h-full flex-col p-6 transition-all hover:-translate-y-0.5 hover:border-merek-300 hover:shadow-md">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <Lencana warna="hijau">{a.jenis}</Lencana>
+                    {a.daring && <Lencana warna="biru">Daring</Lencana>}
+                    {a.skp_idi && <Lencana warna="emas">{a.skp_idi} SKP</Lencana>}
+                  </div>
+                  <h3 className="mt-3.5 text-base font-semibold leading-snug text-slate-900 group-hover:text-merek-700">
+                    {a.judul}
+                  </h3>
+                  <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-slate-600">{a.deskripsi}</p>
+                  <div className="mt-auto pt-4 text-sm">
+                    <p className="font-medium text-slate-700">{tanggalJam(a.mulai)}</p>
+                    <p className="mt-0.5 text-slate-500">{a.lokasi} · {waktuRelatif(a.mulai)}</p>
+                  </div>
+                </Kartu>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* ---------------------------------------------------------- BERITA */}
+      {berita.length > 0 && (
+        <section className="border-y border-slate-200 bg-white py-16">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+            <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
+              <h2 className="font-serif text-3xl font-bold tracking-tight text-slate-900">Kabar Terbaru</h2>
+              <Link href="/berita" className="text-sm font-medium text-merek-700 hover:underline">Semua berita →</Link>
+            </div>
+            <div className="grid gap-8 md:grid-cols-3">
+              {berita.map((b) => (
+                <Link key={b.id} href={`/berita/${b.slug}`} className="group">
+                  <article>
+                    <Lencana warna="netral">{b.kategori}</Lencana>
+                    <h3 className="mt-3 font-serif text-lg font-bold leading-snug text-slate-900 group-hover:text-merek-700">
+                      {b.judul}
+                    </h3>
+                    <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-slate-600">{b.ringkasan}</p>
+                    <p className="mt-3 text-xs text-slate-400">{tanggalSingkat(b.terbit_pada)}</p>
+                  </article>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      {/* ------------------------------------------------------- MEDSOS */}
+      {DAFTAR_SOSMED.some((s) => p[s.kunci]?.trim()) && (
+        <section className="mx-auto max-w-7xl px-4 pt-16 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-center justify-between gap-6 rounded-2xl border border-slate-200 bg-white px-8 py-7">
+            <div>
+              <h2 className="font-serif text-xl font-bold text-slate-900">Ikuti kabar kami</h2>
+              <p className="mt-1 text-sm text-slate-600">Dokumentasi kegiatan, info webinar, dan kabar alumni setiap pekan.</p>
+            </div>
+            <DeretSosmed p={p} />
+          </div>
+        </section>
+      )}
+
+      {/* ------------------------------------------------------------- CTA */}
+      {!sesi.user && (
+        <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+          <div className="rounded-2xl bg-merek-800 px-8 py-14 text-center sm:px-14">
+            <h2 className="font-serif text-3xl font-bold tracking-tight text-white sm:text-4xl">
+              Sudah terdaftar sebagai alumni?
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-merek-100">
+              Perbarui datamu agar sejawat dan adik tingkat bisa menemukanmu. Pendaftaran gratis,
+              diverifikasi pengurus, dan kamu sepenuhnya mengendalikan data mana yang boleh terlihat.
+            </p>
+            <div className="mt-8 flex flex-wrap justify-center gap-3">
+              <TautanTombol href="/daftar" varian="kedua" className="px-6 py-3 text-base">Daftar Sekarang</TautanTombol>
+              <TautanTombol href="/privasi" varian="garis"
+                className="border-white/25 bg-white/5 px-6 py-3 text-base text-white hover:bg-white/10">
+                Baca Kebijakan Privasi
+              </TautanTombol>
+            </div>
+          </div>
+        </section>
+      )}
+    </>
+  );
+}
