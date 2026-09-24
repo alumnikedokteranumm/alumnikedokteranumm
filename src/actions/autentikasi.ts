@@ -16,6 +16,12 @@ function pesanRamah(kode: string) {
     "Email rate limit exceeded": "Terlalu banyak percobaan. Coba lagi beberapa menit lagi.",
     "For security purposes, you can only request this after 60 seconds":
       "Demi keamanan, tunggu 60 detik sebelum mencoba lagi.",
+    "Error sending confirmation email":
+      "Email konfirmasi gagal terkirim. Coba lagi beberapa menit lagi; bila masih gagal, hubungi pengurus lewat halaman Kontak.",
+    "Error sending recovery email":
+      "Email atur ulang kata sandi gagal terkirim. Coba lagi beberapa menit lagi; bila masih gagal, hubungi pengurus.",
+    "Email address not authorized":
+      "Email pendaftaran belum bisa dikirim ke alamat ini. Hubungi pengurus lewat halaman Kontak.",
   };
   return peta[kode] ?? kode;
 }

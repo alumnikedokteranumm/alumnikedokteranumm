@@ -182,8 +182,15 @@ Centang satu per satu:
       misalnya `@alumnikedokteranumm`; ikon Instagram/YouTube/TikTok/dll. otomatis muncul di footer, beranda, dan halaman Kontak). Hapus lowongan & berita contoh bila perlu.
 - [ ] **Pasang layanan email sendiri (SMTP).** ⚠️ Email bawaan Supabase dibatasi **hanya beberapa
       email per jam** — cukup untuk mencoba, **tidak cukup** saat ratusan alumni mendaftar bersamaan.
-      Daftar gratis di **Resend** (resend.com, 3.000 email/bulan) atau **Brevo** (300 email/hari),
-      lalu isi di Supabase → **Authentication → Emails → SMTP Settings**.
+      Tanpa ini pendaftar akan melihat pesan *"Email konfirmasi gagal terkirim"*. Cara termudah: kirim lewat
+      Gmail organisasi (gratis, ±500 email/hari):
+      1. Login `alumnikedokteran.umm@gmail.com` → **myaccount.google.com/security** → aktifkan **Verifikasi 2 Langkah**.
+      2. Buka **myaccount.google.com/apppasswords** → nama `Supabase AKU` → **Buat** → salin 16 hurufnya (tanpa spasi).
+      3. Supabase → **Authentication → Emails → SMTP Settings** → nyalakan **Enable Custom SMTP**:
+         Sender email & Username `alumnikedokteran.umm@gmail.com` · Sender name `AKU - Alumni Kedokteran UMM` ·
+         Host `smtp.gmail.com` · Port `465` · Password = 16 huruf tadi → **Save**.
+      4. **Authentication → Rate Limits** → *email sent per hour* jadi `100` → **Save**.
+      Bila gagal, lihat penyebab pastinya di Supabase → **Logs → Auth**.
 - [ ] **Terjemahkan email konfirmasi.** Supabase → **Authentication → Emails → Templates**.
       Ubah teks *Confirm signup* dan *Reset password* ke Bahasa Indonesia (jangan hapus `{{ .ConfirmationURL }}`).
 - [ ] **Minta pengurus/penasihat hukum membaca `/privasi`.** Halaman Kebijakan Privasi sudah
