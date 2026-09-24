@@ -1,0 +1,78 @@
+# Cadangan otomatis database + berkas Supabase, terenkripsi.
+# Cara menyiapkan & memulihkan: lihat PANDUAN.md bagian "Backup otomatis".
+name: Backup mingguan
+
+on:
+  schedule:
+    - cron: "0 19 * * 0"   # Senin 02.00 WIB (Minggu 19.00 UTC)
+  workflow_dispatch:        # tombol "Run workflow" untuk backup kapan saja
+
+permissions:
+  contents: read
+
+concurrency: backup
+
+jobs:
+  backup:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SUPABASE_DB_URL: ${{ secrets.SUPABASE_DB_URL }}
+      SUPABASE_SECRET_KEY: ${{ secrets.SUPABASE_SECRET_KEY }}
+      BACKUP_PASSWORD: ${{ secrets.BACKUP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Periksa kunci rahasia
+        run: |
+          gagal=0
+          [ -n "$SUPABASE_DB_URL" ] || { echo "::error::Secret SUPABASE_DB_URL belum diisi (lihat PANDUAN.md)"; gagal=1; }
+          [ -n "$BACKUP_PASSWORD" ] || { echo "::error::Secret BACKUP_PASSWORD belum diisi (lihat PANDUAN.md)"; gagal=1; }
+          [ -n "$SUPABASE_SECRET_KEY" ] || echo "::warning::SUPABASE_SECRET_KEY kosong — berkas (foto, dokumen, bukti transfer) TIDAK ikut dicadangkan"
+          exit $gagal
+
+      - name: Pasang pg_dump versi 17
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq postgresql-common > /dev/null
+          sudo /usr/share/postgresql-common/pgdg/apt.postgresql.org.sh -y > /dev/null
+          sudo apt-get install -y -qq postgresql-client-17 > /dev/null
+          /usr/lib/postgresql/17/bin/pg_dump --version
+
+      - name: Salin database
+        run: |
+          set -euo pipefail
+          PGD=/usr/lib/postgresql/17/bin/pg_dump
+          mkdir -p cadangan
+          # 1) Seluruh tabel, data, fungsi, dan aturan keamanan website (wajib berhasil)
+          $PGD "$SUPABASE_DB_URL" --schema=public --no-owner --no-privileges -f cadangan/01_database_website.sql
+          # 2) Akun login (email & sandi terenkripsi) supaya alumni tidak perlu daftar ulang
+          $PGD "$SUPABASE_DB_URL" --data-only --table=auth.users --table=auth.identities \
+            -f cadangan/02_akun_login.sql || echo "::warning::Akun login gagal dicadangkan"
+          # 3) Daftar berkas di penyimpanan
+          $PGD "$SUPABASE_DB_URL" --data-only --table=storage.buckets --table=storage.objects \
+            -f cadangan/03_daftar_berkas.sql || echo "::warning::Daftar berkas gagal dicadangkan"
+          ls -lh cadangan
+
+      - name: Salin berkas (foto, dokumen, bukti transfer)
+        if: env.SUPABASE_SECRET_KEY != ''
+        run: node scripts/backup-berkas.mjs cadangan/berkas
+
+      - name: Bungkus & kunci dengan kata sandi
+        run: |
+          set -euo pipefail
+          nama="cadangan-aku-$(TZ=Asia/Jakarta date +%Y-%m-%d)"
+          echo "NAMA=$nama" >> "$GITHUB_ENV"
+          tar -czf "$nama.tar.gz" cadangan
+          gpg --batch --yes --symmetric --cipher-algo AES256 \
+              --passphrase "$BACKUP_PASSWORD" -o "$nama.tar.gz.gpg" "$nama.tar.gz"
+          rm -rf cadangan "$nama.tar.gz"
+          ls -lh "$nama.tar.gz.gpg"
+
+      - name: Simpan hasil (90 hari)
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.NAMA }}
+          path: ${{ env.NAMA }}.tar.gz.gpg
+          retention-days: 90
+          compression-level: 0

@@ -18,7 +18,8 @@ dalam satu waktu. Total waktu sekitar **45–60 menit** untuk pertama kali.
 6. [Wajib sebelum diumumkan ke alumni](#langkah-6--wajib-sebelum-diumumkan-ke-alumni)
 7. [Panduan harian pengurus](#panduan-harian-untuk-pengurus)
 8. [Fitur baru: mentoring, webinar SKP, iuran, perpustakaan & arsip](#fitur-baru-mentoring-webinar-skp-iuran-perpustakaan--arsip)
-9. [Kalau ada masalah](#kalau-ada-masalah)
+9. [Backup otomatis](#backup-otomatis-cadangan-data)
+10. [Kalau ada masalah](#kalau-ada-masalah)
 
 ---
 
@@ -357,6 +358,61 @@ Tambah/ubah di **Admin → Perpustakaan**. Hanya alumni terverifikasi yang bisa 
    - Alumni bisa melihat daftar lulusan per tahun dan siapa yang sudah bergabung (NIM tidak ditampilkan).
    - Di **Verifikasi & Anggota**, pendaftar yang NIM-nya cocok dengan arsip diberi tanda hijau
      **✓ cocok arsip** — verifikasi jadi jauh lebih cepat.
+
+---
+
+## Backup otomatis (cadangan data)
+
+Setiap **Senin pukul 02.00 WIB**, GitHub otomatis menyalin seluruh isi Supabase:
+database (alumni, tracer, pembayaran, sertifikat, dll.), akun login, dan semua berkas
+(foto profil, dokumen, bukti transfer). Hasilnya dikunci dengan kata sandi dan disimpan **90 hari**.
+
+### Menyiapkan (sekali saja, ±10 menit)
+
+Kamu perlu mengisi **3 kunci rahasia** di GitHub:
+**github.com/alumnikedokteranumm/alumnikedokteranumm → Settings → Secrets and variables → Actions → New repository secret**.
+Setiap kunci: isi **Name** persis seperti di bawah, tempel isinya di **Secret**, klik **Add secret**.
+
+| Name | Isinya | Cara mendapatkan |
+|---|---|---|
+| `SUPABASE_DB_URL` | Alamat koneksi database | Supabase → tombol **Connect** (atas) → tab **Connection String** → *Method*: **Session pooler** → salin alamat `postgresql://postgres.xxxx:[YOUR-PASSWORD]@…pooler.supabase.com:5432/postgres`, lalu ganti `[YOUR-PASSWORD]` (termasuk kurung sikunya) dengan kata sandi database. |
+| `SUPABASE_SECRET_KEY` | Kunci rahasia Supabase | Supabase → **Project Settings → API Keys** → bagian **Secret keys** → salin kunci `sb_secret_…` (atau kunci *service_role* di tab Legacy). |
+| `BACKUP_PASSWORD` | Kata sandi pengunci cadangan | **Buat sendiri**, minimal 16 karakter. |
+
+> 🔑 **Lupa kata sandi database?** Supabase → **Database → Settings → Reset database password**.
+> Aman — website tidak terpengaruh. Pakai sandi dari **huruf dan angka saja** supaya tidak bermasalah di alamat koneksi.
+>
+> ⚠️ **Simpan `BACKUP_PASSWORD` di dua tempat aman** (mis. pengelola kata sandi + catatan bendahara/sekretaris).
+> Tanpa kata sandi ini cadangan **tidak bisa dibuka oleh siapa pun**, termasuk kamu.
+>
+> 🔒 `SUPABASE_SECRET_KEY` sangat kuat (bisa membuka semua data). Jangan pernah menaruhnya di tempat lain
+> selain kotak Secret GitHub — GitHub menyimpannya terenkripsi dan tidak pernah menampilkannya lagi.
+
+### Mencoba backup pertama
+
+1. Buka repo di GitHub → tab **Actions** → di kiri pilih **Backup mingguan**.
+2. Klik **Run workflow** → **Run workflow**.
+3. Tunggu 2–5 menit sampai muncul centang hijau ✅.
+4. Klik baris yang hijau → di bagian bawah **Artifacts** ada berkas `cadangan-aku-TANGGAL` — itulah cadangannya.
+
+Kalau muncul silang merah ❌, klik barisnya → klik langkah yang merah → kirim screenshot-nya.
+
+### Kebiasaan yang disarankan
+
+- **Sebulan sekali**, unduh cadangan terbaru dan simpan di Google Drive milik organisasi
+  (alumnikedokteran.umm@gmail.com), karena cadangan di GitHub terhapus otomatis setelah 90 hari.
+- Cadangan juga bisa dibuat kapan saja sebelum perubahan besar (mis. impor arsip massal) lewat **Run workflow**.
+
+### Kalau suatu saat data harus dipulihkan
+
+Minta bantuan developer/Claude. Cadangan dibuka dengan perintah:
+
+```bash
+gpg -d cadangan-aku-TANGGAL.tar.gz.gpg | tar -xz
+```
+
+Isinya: `01_database_website.sql` (seluruh tabel & aturan keamanan), `02_akun_login.sql`,
+`03_daftar_berkas.sql`, dan folder `berkas/` berisi semua file per bucket.
 
 ---
 
