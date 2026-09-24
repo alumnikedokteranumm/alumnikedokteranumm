@@ -3,7 +3,7 @@ import type { Pengurus } from "@/lib/tipe";
 
 /*
  * Mengelompokkan pengurus otomatis dari teks jabatannya, tanpa kolom tambahan:
- *   Pembina          : Pelindung, Penanggung jawab, Pembina, Penasihat
+ *   Pelindung & Penanggungjawab: Pelindung, Penanggung jawab, Pembina, Penasihat
  *   Dewan Konsultatif: jabatan yang mengandung "Dewan"
  *   Pengurus Harian  : Ketua (Umum/AKU), Wakil Ketua, Sekretaris, Bendahara
  *   Divisi           : "Ketua Divisi X" = ketua, "Divisi X" = anggota
@@ -44,6 +44,11 @@ function Label({ children }: { children: string }) {
   );
 }
 
+/** Garis penghubung tipis antartingkat, seperti bagan organisasi. */
+function Garis() {
+  return <div className="mx-auto h-6 w-px bg-merek-200" aria-hidden />;
+}
+
 function KartuOrang({ o, jabatan = true }: { o: Pengurus; jabatan?: boolean }) {
   return (
     <div className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-4">
@@ -58,12 +63,16 @@ function KartuOrang({ o, jabatan = true }: { o: Pengurus; jabatan?: boolean }) {
 
 export function StrukturPengurus({ daftar }: { daftar: Pengurus[] }) {
   const k = kelompokkan(daftar);
+  const wakil = k.harian.filter((o) => /wakil/i.test(o.jabatan));
+  const sekretaris = k.harian.filter((o) => /sekretaris/i.test(o.jabatan));
+  const bendahara = k.harian.filter((o) => /bendahara/i.test(o.jabatan));
+  const harianLain = k.harian.filter((o) => !wakil.includes(o) && !sekretaris.includes(o) && !bendahara.includes(o));
 
   return (
     <div>
       {k.pembina.length > 0 && (
         <>
-          <Label>Pembina</Label>
+          <Label>Pelindung & Penanggungjawab</Label>
           <div className="grid gap-4 sm:grid-cols-2">{k.pembina.map((o) => <KartuOrang key={o.id} o={o} />)}</div>
         </>
       )}
@@ -79,7 +88,7 @@ export function StrukturPengurus({ daftar }: { daftar: Pengurus[] }) {
         <>
           <Label>Pengurus Harian</Label>
           {k.ketua && (
-            <div className="mx-auto mb-5 flex max-w-md flex-col items-center gap-3 rounded-2xl border-2 border-merek-600 bg-gradient-to-b from-merek-50 to-white px-6 py-7 text-center">
+            <div className="mx-auto flex max-w-md flex-col items-center gap-3 rounded-2xl border-2 border-merek-600 bg-gradient-to-b from-merek-50 to-white px-6 py-7 text-center">
               <Avatar nama={k.ketua.nama} url={k.ketua.foto_url} ukuran="size-24" teks="text-2xl" />
               <div>
                 <p className="font-serif text-xl font-bold text-slate-900">{k.ketua.nama}</p>
@@ -87,7 +96,25 @@ export function StrukturPengurus({ daftar }: { daftar: Pengurus[] }) {
               </div>
             </div>
           )}
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{k.harian.map((o) => <KartuOrang key={o.id} o={o} />)}</div>
+          {wakil.length > 0 && (
+            <>
+              {k.ketua && <Garis />}
+              <div className="mx-auto grid max-w-md gap-4">{wakil.map((o) => <KartuOrang key={o.id} o={o} />)}</div>
+            </>
+          )}
+          {(sekretaris.length > 0 || bendahara.length > 0) && (
+            <>
+              <Garis />
+              {/* Sekretaris di kiri, Bendahara di kanan */}
+              <div className="grid gap-4 md:grid-cols-2 md:gap-6">
+                <div className="grid content-start gap-4">{sekretaris.map((o) => <KartuOrang key={o.id} o={o} />)}</div>
+                <div className="grid content-start gap-4">{bendahara.map((o) => <KartuOrang key={o.id} o={o} />)}</div>
+              </div>
+            </>
+          )}
+          {harianLain.length > 0 && (
+            <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{harianLain.map((o) => <KartuOrang key={o.id} o={o} />)}</div>
+          )}
         </>
       )}
 

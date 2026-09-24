@@ -95,7 +95,7 @@ export default async function Tentang() {
         )}
 
         <section id="pengurus" className="mt-16 scroll-mt-24">
-          <h2 className="font-serif text-2xl font-bold text-slate-900">Struktur pengurus</h2>
+          <h2 className="font-serif text-2xl font-bold text-slate-900">Struktur Pengurus</h2>
           {pengurus[0]?.periode && <p className="mt-1 text-sm text-slate-500">Periode {pengurus[0].periode}</p>}
           <div className="mt-8"><StrukturPengurus daftar={pengurus} /></div>
         </section>
