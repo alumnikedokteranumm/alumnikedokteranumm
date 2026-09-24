@@ -206,48 +206,6 @@ export default async function Beranda() {
       </section>
       )}
 
-      {/* --------------------------------------------------------- LAYANAN */}
-      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
-        <div className="max-w-2xl">
-          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-merek-600">Apa yang bisa kamu lakukan</p>
-          <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight text-slate-900">
-            Layanan untuk alumni
-          </h2>
-        </div>
-
-        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
-          {[
-            { href: "/direktori", judul: "Direktori Alumni", teks: "Cari sejawat berdasarkan angkatan, kota, atau bidang spesialisasi. Tertutup — hanya untuk alumni terverifikasi.", ikon: "M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7Z", kunci: true },
-            { href: "/video", judul: "Video Edukasi", teks: "Rekaman webinar, kuliah tamu, dan materi keterampilan klinis untuk belajar kapan saja.", ikon: "M15 10l4.55-2.28A1 1 0 0 1 21 8.62v6.76a1 1 0 0 1-1.45.9L15 14M5 18h8a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2Z", kunci: true },
-            { href: "/dokumen", judul: "Dokumen Penting", teks: "Unduh sertifikat akreditasi, SK, pedoman, dan formulir resmi dalam format PDF.", ikon: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M12 18v-6M9 15l3 3 3-3", kunci: true },
-            { href: "/agenda", judul: "Agenda Ilmiah", teks: "Seminar, webinar ber-SKP, workshop, dan temu alumni. Lengkap dengan tautan pendaftaran.", ikon: "M8 2v4M16 2v4M3 10h18M5 6h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" },
-            { href: "/karier", judul: "Karier & Beasiswa", teks: "Lowongan dokter umum dan spesialis, program PPDS, serta informasi beasiswa pendidikan lanjut.", ikon: "M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2ZM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" },
-            { href: "/tracer-study", judul: "Tracer Study", teks: "Kuesioner singkat yang menjadi dasar akreditasi LAM-PTKes dan perbaikan kurikulum FK UMM.", ikon: "M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11", kunci: true },
-            { href: "/mentoring", judul: "Mentoring Alumni", teks: "Ngobrol 30 menit dengan senior soal pilihan spesialis, PPDS, buka praktik, atau karier non-klinis.", ikon: "M17 20h5v-2a3 3 0 0 0-5.36-1.86M17 20H7m10 0v-2c0-.66-.13-1.28-.36-1.86M7 20H2v-2a3 3 0 0 1 5.36-1.86M7 20v-2c0-.66.13-1.28.36-1.86m0 0a5 5 0 0 1 9.28 0M15 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z", kunci: true },
-            { href: "/skp", judul: "Webinar & SKP", teks: "Daftar webinar, isi presensi dan kuis, lalu unduh sertifikat ber-SKP. Riwayat SKP-mu tercatat rapi.", ikon: "M12 14l9-5-9-5-9 5 9 5Zm0 0v6m-5-8.2V17l5 3 5-3v-5.2" },
-            { href: "/pustaka", judul: "Perpustakaan Digital", teks: "Jurnal, pedoman klinis, dan kalkulator klinis gratis yang dikurasi pengurus dalam satu halaman.", ikon: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15Z", kunci: true },
-            { href: "/arsip-lulusan", judul: "Arsip Lulusan", teks: "Daftar lulusan FK UMM per tahun sejak angkatan pertama. Lihat siapa teman seangkatan yang sudah bergabung.", ikon: "M21 8v13H3V8M1 3h22v5H1zM10 12h4", kunci: true },
-            { href: "/donasi", judul: "Iuran & Donasi", teks: "Bayar iuran, konfirmasi transfer dengan bukti, dan pantau laporan keuangan yang terbuka.", ikon: "M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.7 1.1-1a5.5 5.5 0 0 0 0-7.9Z" },
-            { href: "/berita", judul: "Kabar Almamater", teks: "Berita kegiatan, prestasi alumni, dan pengumuman resmi dari pengurus Alumni Kedokteran UMM.", ikon: "M4 4h16v16H4zM8 8h8M8 12h8M8 16h5" },
-          ].map((k) => (
-            <Link key={k.href} href={k.href} className="group">
-              <Kartu className="h-full p-6 transition-all hover:-translate-y-0.5 hover:border-merek-300 hover:shadow-md">
-                <div className="flex items-start justify-between">
-                  <span className="grid size-11 place-items-center rounded-lg bg-merek-50 text-merek-700">
-                    <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
-                      <path d={k.ikon} />
-                    </svg>
-                  </span>
-                  {k.kunci && <Lencana warna="netral">Khusus alumni</Lencana>}
-                </div>
-                <h3 className="mt-4 text-base font-semibold text-slate-900 group-hover:text-merek-700">{k.judul}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600">{k.teks}</p>
-              </Kartu>
-            </Link>
-          ))}
-        </div>
-      </section>
-
       {/* -------------------------------------------------------- SAMBUTAN */}
       {p.sambutan_isi && (
         <section className="bg-white py-20">
@@ -308,6 +266,48 @@ export default async function Beranda() {
           </div>
         </section>
       )}
+
+      {/* --------------------------------------------------------- LAYANAN */}
+      <section className="mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="max-w-2xl">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-merek-600">Apa yang bisa kamu lakukan</p>
+          <h2 className="mt-2 font-serif text-3xl font-bold tracking-tight text-slate-900">
+            Layanan untuk alumni
+          </h2>
+        </div>
+
+        <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            { href: "/direktori", judul: "Direktori Alumni", teks: "Cari sejawat berdasarkan angkatan, kota, atau bidang spesialisasi. Tertutup — hanya untuk alumni terverifikasi.", ikon: "M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0ZM12 14a7 7 0 0 0-7 7h14a7 7 0 0 0-7-7Z", kunci: true },
+            { href: "/video", judul: "Video Edukasi", teks: "Rekaman webinar, kuliah tamu, dan materi keterampilan klinis untuk belajar kapan saja.", ikon: "M15 10l4.55-2.28A1 1 0 0 1 21 8.62v6.76a1 1 0 0 1-1.45.9L15 14M5 18h8a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2Z", kunci: true },
+            { href: "/dokumen", judul: "Dokumen Penting", teks: "Unduh sertifikat akreditasi, SK, pedoman, dan formulir resmi dalam format PDF.", ikon: "M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8zM14 2v6h6M12 18v-6M9 15l3 3 3-3", kunci: true },
+            { href: "/agenda", judul: "Agenda Ilmiah", teks: "Seminar, webinar ber-SKP, workshop, dan temu alumni. Lengkap dengan tautan pendaftaran.", ikon: "M8 2v4M16 2v4M3 10h18M5 6h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Z" },
+            { href: "/karier", judul: "Karier & Beasiswa", teks: "Lowongan dokter umum dan spesialis, program PPDS, serta informasi beasiswa pendidikan lanjut.", ikon: "M20 7H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2ZM8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" },
+            { href: "/tracer-study", judul: "Tracer Study", teks: "Kuesioner singkat yang menjadi dasar akreditasi LAM-PTKes dan perbaikan kurikulum FK UMM.", ikon: "M9 11l3 3 8-8M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11", kunci: true },
+            { href: "/mentoring", judul: "Mentoring Alumni", teks: "Ngobrol 30 menit dengan senior soal pilihan spesialis, PPDS, buka praktik, atau karier non-klinis.", ikon: "M17 20h5v-2a3 3 0 0 0-5.36-1.86M17 20H7m10 0v-2c0-.66-.13-1.28-.36-1.86M7 20H2v-2a3 3 0 0 1 5.36-1.86M7 20v-2c0-.66.13-1.28.36-1.86m0 0a5 5 0 0 1 9.28 0M15 7a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z", kunci: true },
+            { href: "/skp", judul: "Webinar & SKP", teks: "Daftar webinar, isi presensi dan kuis, lalu unduh sertifikat ber-SKP. Riwayat SKP-mu tercatat rapi.", ikon: "M12 14l9-5-9-5-9 5 9 5Zm0 0v6m-5-8.2V17l5 3 5-3v-5.2" },
+            { href: "/pustaka", judul: "Perpustakaan Digital", teks: "Jurnal, pedoman klinis, dan kalkulator klinis gratis yang dikurasi pengurus dalam satu halaman.", ikon: "M4 19.5A2.5 2.5 0 0 1 6.5 17H20M4 19.5A2.5 2.5 0 0 0 6.5 22H20V2H6.5A2.5 2.5 0 0 0 4 4.5v15Z", kunci: true },
+            { href: "/arsip-lulusan", judul: "Arsip Lulusan", teks: "Daftar lulusan FK UMM per tahun sejak angkatan pertama. Lihat siapa teman seangkatan yang sudah bergabung.", ikon: "M21 8v13H3V8M1 3h22v5H1zM10 12h4", kunci: true },
+            { href: "/donasi", judul: "Iuran & Donasi", teks: "Bayar iuran, konfirmasi transfer dengan bukti, dan pantau laporan keuangan yang terbuka.", ikon: "M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8l1.1 1L12 21.2l7.7-7.7 1.1-1a5.5 5.5 0 0 0 0-7.9Z" },
+            { href: "/berita", judul: "Kabar Almamater", teks: "Berita kegiatan, prestasi alumni, dan pengumuman resmi dari pengurus Alumni Kedokteran UMM.", ikon: "M4 4h16v16H4zM8 8h8M8 12h8M8 16h5" },
+          ].map((k) => (
+            <Link key={k.href} href={k.href} className="group">
+              <Kartu className="h-full p-6 transition-all hover:-translate-y-0.5 hover:border-merek-300 hover:shadow-md">
+                <div className="flex items-start justify-between">
+                  <span className="grid size-11 place-items-center rounded-lg bg-merek-50 text-merek-700">
+                    <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+                      <path d={k.ikon} />
+                    </svg>
+                  </span>
+                  {k.kunci && <Lencana warna="netral">Khusus alumni</Lencana>}
+                </div>
+                <h3 className="mt-4 text-base font-semibold text-slate-900 group-hover:text-merek-700">{k.judul}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-slate-600">{k.teks}</p>
+              </Kartu>
+            </Link>
+          ))}
+        </div>
+      </section>
 
       {/* ------------------------------------------------------- MEDSOS */}
       {DAFTAR_SOSMED.some((s) => p[s.kunci]?.trim()) && (
