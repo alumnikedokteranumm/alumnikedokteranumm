@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { ambilPengaturan } from "@/lib/sesi";
 import { ambilPengurus, ambilStatistik } from "@/lib/data";
-import { Avatar } from "@/components/avatar";
+import { StrukturPengurus } from "@/components/struktur-pengurus";
 import { Kartu, TautanTombol } from "@/components/ui/dasar";
 import { LABEL_PROFESI } from "@/lib/konstanta";
 import { angka } from "@/lib/format";
@@ -97,17 +97,7 @@ export default async function Tentang() {
         <section id="pengurus" className="mt-16 scroll-mt-24">
           <h2 className="font-serif text-2xl font-bold text-slate-900">Struktur pengurus</h2>
           {pengurus[0]?.periode && <p className="mt-1 text-sm text-slate-500">Periode {pengurus[0].periode}</p>}
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {pengurus.map((o) => (
-              <Kartu key={o.id} className="flex items-center gap-4 p-5">
-                <Avatar nama={o.nama} url={o.foto_url} />
-                <div className="min-w-0">
-                  <p className="font-semibold leading-snug text-slate-900">{o.nama}</p>
-                  <p className="text-sm text-merek-700">{o.jabatan}</p>
-                </div>
-              </Kartu>
-            ))}
-          </div>
+          <div className="mt-8"><StrukturPengurus daftar={pengurus} /></div>
         </section>
 
         <section className="mt-16 rounded-2xl bg-slate-900 px-8 py-12 text-center text-white">
