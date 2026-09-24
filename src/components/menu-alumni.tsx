@@ -34,7 +34,7 @@ export function MenuAlumni() {
       </button>
 
       {buka && (
-        <div role="menu" className="absolute left-0 top-full z-50 mt-2 grid w-[36rem] grid-cols-2 gap-0.5 rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
+        <div role="menu" className="absolute left-1/2 top-full z-50 mt-2 grid w-[min(36rem,calc(100vw-2rem))] -translate-x-1/2 grid-cols-2 gap-0.5 rounded-xl border border-slate-200 bg-white p-2 shadow-xl">
           {TAUTAN_ALUMNI.map((t) => (
             <Link key={t.href} href={t.href} role="menuitem"
               className={`flex items-start gap-3 rounded-lg px-3 py-2.5 ${jalur.startsWith(t.href) ? "bg-merek-50" : "hover:bg-slate-50"}`}>
