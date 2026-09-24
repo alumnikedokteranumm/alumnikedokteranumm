@@ -167,8 +167,8 @@ Supabase → **Authentication → URL Configuration**:
 
 ### 5d. (Opsional) Pakai domain sendiri
 
-Misalnya `ikafkumm.org` (±Rp200 ribu/tahun di Niagahoster/Rumahweb/Cloudflare), atau minta
-subdomain `ika.fk.umm.ac.id` ke bagian IT kampus. Di Vercel: **Settings → Domains → Add**,
+Misalnya `alumnikedokteranumm.org` (±Rp200 ribu/tahun di Niagahoster/Rumahweb/Cloudflare), atau minta
+subdomain `alumni.kedokteran.umm.ac.id` ke bagian IT kampus. Di Vercel: **Settings → Domains → Add**,
 lalu ikuti petunjuk DNS-nya. Setelah aktif, ulangi langkah 5b-6 dan 5c dengan domain baru.
 
 ---

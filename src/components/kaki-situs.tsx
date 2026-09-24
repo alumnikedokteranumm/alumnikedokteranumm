@@ -87,7 +87,7 @@ export async function KakiSitus() {
           <div className="flex flex-wrap gap-x-5 gap-y-2">
             <Link href="/privasi" className="hover:text-merek-700 hover:underline">Kebijakan Privasi</Link>
             <Link href="/kontak" className="hover:text-merek-700 hover:underline">Kontak</Link>
-            <a href="https://fk.umm.ac.id" target="_blank" rel="noreferrer noopener" className="hover:text-merek-700 hover:underline">
+            <a href="https://kedokteran.umm.ac.id/" target="_blank" rel="noreferrer noopener" className="hover:text-merek-700 hover:underline">
               Situs FK UMM ↗
             </a>
           </div>
