@@ -104,7 +104,6 @@ export default async function Tentang() {
                 <div className="min-w-0">
                   <p className="font-semibold leading-snug text-slate-900">{o.nama}</p>
                   <p className="text-sm text-merek-700">{o.jabatan}</p>
-                  {o.angkatan && <p className="text-xs text-slate-400">Angkatan {o.angkatan}</p>}
                 </div>
               </Kartu>
             ))}

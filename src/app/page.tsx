@@ -134,7 +134,7 @@ export default async function Beranda() {
   ]);
   // Foto sambutan: dari Pengaturan Situs, atau foto Ketua Umum di menu Pengurus
   const fotoKetua = p.sambutan_foto?.trim() ||
-    pengurus.find((x) => /ketua umum/i.test(x.jabatan) && x.foto_url)?.foto_url || null;
+    pengurus.find((x) => /^ketua(\s+(umum|aku))?$/i.test(x.jabatan.trim()) && x.foto_url)?.foto_url || null;
 
   const angkaSorot = [
     { nilai: stat.total_alumni,   label: "Alumni terdata",      imbuhan: "" },
