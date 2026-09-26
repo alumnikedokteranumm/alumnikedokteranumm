@@ -28,7 +28,7 @@ export function NavAdmin({ admin }: { admin: boolean }) {
       { href: "/admin/konten/video", label: "Video Edukasi", ikon: "🎬" },
       { href: "/admin/konten/dokumen", label: "Dokumen", ikon: "📄" },
       { href: "/admin/konten/lowongan", label: "Karier", ikon: "💼" },
-      { href: "/admin/konten/pengurus", label: "Pengurus", ikon: "👥" },
+      { href: "/admin/pengurus", label: "Struktur Pengurus", ikon: "👥" },
     ] },
     ...(admin ? [{ judul: "Sistem", tautan: [
       { href: "/admin/pengaturan", label: "Pengaturan Situs", ikon: "⚙️" },

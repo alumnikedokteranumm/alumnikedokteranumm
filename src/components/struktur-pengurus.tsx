@@ -1,39 +1,6 @@
 import { Avatar } from "./avatar";
+import { kelompokkan } from "@/lib/pengurus";
 import type { Pengurus } from "@/lib/tipe";
-
-/*
- * Mengelompokkan pengurus otomatis dari teks jabatannya, tanpa kolom tambahan:
- *   Pelindung & Penanggungjawab: Pelindung, Penanggung jawab, Pembina, Penasihat
- *   Dewan Konsultatif: jabatan yang mengandung "Dewan"
- *   Pengurus Harian  : Ketua (Umum/AKU), Wakil Ketua, Sekretaris, Bendahara
- *   Divisi           : "Ketua Divisi X" = ketua, "Divisi X" = anggota
- * Urutan di dalam kelompok mengikuti kolom "Urutan tampil" di Panel Admin.
- */
-const PEMBINA = /pelindung|penanggung\s*jawab|pembina|penasi?h?e?at/i;
-const KETUA_UMUM = /^ketua(\s+(umum|aku))?$/i;
-const HARIAN = /wakil\s+ketua|sekretaris|bendahara/i;
-const DIVISI = /^(ketua|koordinator)?\s*(divisi|bidang)\s+(.+)$/i;
-
-function kelompokkan(daftar: Pengurus[]) {
-  const pembina: Pengurus[] = [], dewan: Pengurus[] = [], harian: Pengurus[] = [], lainnya: Pengurus[] = [];
-  let ketua: Pengurus | null = null;
-  const divisi = new Map<string, { nama: string; ketua: Pengurus[]; anggota: Pengurus[] }>();
-
-  for (const o of daftar) {
-    const j = o.jabatan.trim();
-    const d = j.match(DIVISI);
-    if (KETUA_UMUM.test(j) && !ketua) ketua = o;
-    else if (PEMBINA.test(j)) pembina.push(o);
-    else if (/dewan/i.test(j)) dewan.push(o);
-    else if (HARIAN.test(j)) harian.push(o);
-    else if (d) {
-      const kunci = d[3].trim().toLowerCase();
-      if (!divisi.has(kunci)) divisi.set(kunci, { nama: `${d[2][0].toUpperCase()}${d[2].slice(1).toLowerCase()} ${d[3].trim()}`, ketua: [], anggota: [] });
-      (d[1] ? divisi.get(kunci)!.ketua : divisi.get(kunci)!.anggota).push(o);
-    } else lainnya.push(o);
-  }
-  return { pembina, dewan, ketua, harian, divisi: [...divisi.values()], lainnya };
-}
 
 function Label({ children }: { children: string }) {
   return (
