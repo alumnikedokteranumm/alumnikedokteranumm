@@ -102,9 +102,15 @@ export function StrukturPengurus({ daftar }: { daftar: Pengurus[] }) {
                   </div>
                 ))}
                 {d.anggota.length > 0 && (
-                  <ul className={`space-y-1.5 text-sm text-slate-600 ${d.ketua.length ? "mt-4 border-t border-slate-100 pt-4" : "mt-4"}`}>
+                  <ul className={`space-y-3 ${d.ketua.length ? "mt-4 border-t border-slate-100 pt-4" : "mt-4"}`}>
                     {d.anggota.map((o) => (
-                      <li key={o.id} className="flex gap-2"><span className="text-merek-400" aria-hidden>•</span>{o.nama}</li>
+                      <li key={o.id} className="flex items-center gap-3">
+                        <Avatar nama={o.nama} url={o.foto_url} ukuran="size-9" teks="text-xs" />
+                        <div className="min-w-0">
+                          <p className="text-sm font-medium leading-snug text-slate-800">{o.nama}</p>
+                          <p className="text-xs text-slate-500">Anggota</p>
+                        </div>
+                      </li>
                     ))}
                   </ul>
                 )}
