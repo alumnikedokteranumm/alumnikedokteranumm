@@ -134,7 +134,10 @@ export function KelolaStruktur({ k, jumlah, periode }: { k: Kelompok; jumlah: nu
         <Avatar nama={o.nama} url={o.foto_url} ukuran="size-9" teks="text-xs" />
         <div className="min-w-0 flex-1">
           <p className="truncate text-sm font-medium text-slate-900">{o.nama}</p>
-          {jenis.tipe !== "divisi" && jenis.tipe !== "dewan" && <p className="text-xs text-slate-500">{o.jabatan}</p>}
+          {/* jabatan di bawah nama; bila sudah tampil sebagai lencana, hanya di layar HP */}
+          {jenis.tipe !== "divisi" && jenis.tipe !== "dewan" && (
+            <p className={`text-xs text-slate-500 ${lencana ? "sm:hidden" : ""}`}>{o.jabatan}</p>
+          )}
         </div>
         {lencana && <span className="hidden rounded-full bg-merek-50 px-2 py-0.5 text-xs font-medium text-merek-700 sm:inline">{lencana}</span>}
         <div className="flex shrink-0">
@@ -209,8 +212,8 @@ export function KelolaStruktur({ k, jumlah, periode }: { k: Kelompok; jumlah: nu
         {bagian({ kunci: "harian", judul: "Pengurus Harian", jenis: { tipe: "harian" },
           isi: <>
             {/* Ketua selalu paling atas; panah hanya menggeser wakil, sekretaris, bendahara */}
-            {k.ketua && baris({ o: k.ketua, i: 0, daftar: [k.ketua], jenis: { tipe: "harian" }, lencana: "Ketua" })}
-            {k.harian.map((o, i) => baris({ o, i, daftar: k.harian, jenis: { tipe: "harian" } }))}
+            {k.ketua && baris({ o: k.ketua, i: 0, daftar: [k.ketua], jenis: { tipe: "harian" }, lencana: k.ketua.jabatan })}
+            {k.harian.map((o, i) => baris({ o, i, daftar: k.harian, jenis: { tipe: "harian" }, lencana: o.jabatan }))}
           </> })}
       </div>
 
