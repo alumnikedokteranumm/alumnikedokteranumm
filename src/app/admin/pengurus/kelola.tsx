@@ -17,7 +17,7 @@ type Jenis =
 
 const SARAN: Record<string, string[]> = {
   pembina: ["Pelindung", "Penanggungjawab", "Penasihat"],
-  harian: ["Ketua AKU", "Wakil Ketua", "Sekretaris 1", "Sekretaris 2", "Bendahara 1", "Bendahara 2"],
+  harian: ["Ketua Umum", "Wakil Ketua Umum", "Sekretaris 1", "Sekretaris 2", "Bendahara 1", "Bendahara 2"],
 };
 
 /* ------------------------------------------------------------------ formulir */
