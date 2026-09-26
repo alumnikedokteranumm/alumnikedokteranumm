@@ -158,7 +158,7 @@ export default async function Beranda() {
       {/* ------------------------------------------------------------ HERO */}
       <section className="pola-hero relative overflow-hidden bg-merek-900 text-white">
         <div className="mx-auto grid max-w-7xl items-center gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1fr_auto] lg:gap-16 lg:px-8 lg:py-24">
-          <div className="order-last max-w-3xl text-center lg:order-first lg:text-left">
+          <div className="order-last mx-auto max-w-3xl text-center lg:order-first lg:mx-0 lg:text-left">
             <span className="inline-flex rounded-full bg-white/10 px-3 py-1 text-xs font-medium text-emas-400 ring-1 ring-emas-400/30">
               Portal Resmi Alumni
             </span>
