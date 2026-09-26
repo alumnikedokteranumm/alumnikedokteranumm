@@ -5,7 +5,7 @@ import { useFormStatus } from "react-dom";
 import Link from "next/link";
 import { gantiNamaDivisi, hapusOrang, simpanOrang, simpanPeriode, simpanUrutan } from "@/actions/pengurus";
 import { Avatar } from "@/components/avatar";
-import { IsianGambar } from "@/components/unggah-gambar";
+import { IsianFotoBulat } from "@/components/unggah-foto-bulat";
 import { Isian, Pesan, Pilihan, Tombol } from "@/components/ui/dasar";
 import { namaDivisi, urutanTampil, type Kelompok } from "@/lib/pengurus";
 import type { Pengurus } from "@/lib/tipe";
@@ -66,7 +66,7 @@ function FormOrang({ jenis, awal, tutup }: { jenis: Jenis; awal?: Pengurus; tutu
       </div>
       <fieldset className="text-sm">
         <legend className="mb-1 font-medium text-slate-700">Foto (opsional)</legend>
-        <IsianGambar nama="foto_url" awal={awal?.foto_url ?? null} folder="pengurus" />
+        <IsianFotoBulat nama="foto_url" awal={awal?.foto_url ?? null} folder="pengurus" />
       </fieldset>
       <div className="flex gap-2">
         <Simpan label={awal ? "Simpan perubahan" : "Tambahkan"} />
