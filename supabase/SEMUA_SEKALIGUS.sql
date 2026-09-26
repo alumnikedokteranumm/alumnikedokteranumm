@@ -2178,8 +2178,6 @@ select * from (values
    'Repositori resmi pedoman dan publikasi WHO.', 'Gratis', 10),
   ('NICE Guidance', 'Pedoman Klinis', 'https://www.nice.org.uk/guidance', 'NICE (Inggris)',
    'Pedoman klinis berbasis bukti yang ringkas dan rutin diperbarui.', 'Gratis', 11),
-  ('Plataran Sehat', 'Pendidikan Berkelanjutan & SKP', 'https://lms.kemkes.go.id/', 'Kementerian Kesehatan RI',
-   'Pelatihan daring resmi Kemenkes dan pencatatan SKP tenaga medis.', 'Perlu daftar (gratis)', 20),
   ('MDCalc', 'Alat Bantu Klinis', 'https://www.mdcalc.com/', 'MDCalc',
    'Ratusan kalkulator dan skor klinis (CURB-65, Wells, CHA₂DS₂-VASc, dll.) lengkap dengan rujukannya.', 'Gratis', 30)
 ) as v(judul, kategori, url, penyedia, deskripsi, akses, urutan)

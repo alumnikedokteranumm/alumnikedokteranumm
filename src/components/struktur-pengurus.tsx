@@ -19,7 +19,7 @@ function Garis() {
 function KartuOrang({ o, jabatan = true }: { o: Pengurus; jabatan?: boolean }) {
   return (
     <div className="flex items-center gap-4 rounded-xl border border-slate-200 bg-white p-4">
-      <Avatar nama={o.nama} url={o.foto_url} ukuran="size-12" teks="text-sm" />
+      <Avatar nama={o.nama} url={o.foto_url} ukuran="size-[72px]" teks="text-lg" />
       <div className="min-w-0">
         <p className="font-semibold leading-snug text-slate-900">{o.nama}</p>
         {jabatan && <p className="text-sm text-merek-700">{o.jabatan}</p>}
@@ -94,7 +94,7 @@ export function StrukturPengurus({ daftar }: { daftar: Pengurus[] }) {
                 <h4 className="font-serif text-lg font-bold leading-snug text-merek-900">{d.nama}</h4>
                 {d.ketua.map((o) => (
                   <div key={o.id} className="mt-4 flex items-center gap-3">
-                    <Avatar nama={o.nama} url={o.foto_url} ukuran="size-11" teks="text-sm" />
+                    <Avatar nama={o.nama} url={o.foto_url} ukuran="size-[66px]" teks="text-base" />
                     <div className="min-w-0">
                       <p className="font-semibold leading-snug text-slate-900">{o.nama}</p>
                       <p className="text-sm text-merek-700">Ketua Divisi</p>
@@ -105,7 +105,7 @@ export function StrukturPengurus({ daftar }: { daftar: Pengurus[] }) {
                   <ul className={`space-y-3 ${d.ketua.length ? "mt-4 border-t border-slate-100 pt-4" : "mt-4"}`}>
                     {d.anggota.map((o) => (
                       <li key={o.id} className="flex items-center gap-3">
-                        <Avatar nama={o.nama} url={o.foto_url} ukuran="size-11" teks="text-sm" />
+                        <Avatar nama={o.nama} url={o.foto_url} ukuran="size-[66px]" teks="text-base" />
                         <div className="min-w-0">
                           <p className="text-sm font-medium leading-snug text-slate-800">{o.nama}</p>
                           <p className="text-xs text-slate-500">Anggota</p>

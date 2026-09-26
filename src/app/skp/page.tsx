@@ -65,6 +65,23 @@ export default async function HubSkp() {
         deskripsi="Daftar webinar, isi presensi dan kuis di hari-H, lalu unduh sertifikat yang langsung tercatat di portofolio SKP-mu."
       />
 
+      {/* Pencatatan SKP resmi ada di platform Kemenkes */}
+      <a href="https://lms.kemkes.go.id/" target="_blank" rel="noreferrer noopener"
+        className="group mb-8 flex flex-wrap items-center gap-4 rounded-xl border border-emerald-200 bg-emerald-50 px-5 py-4 transition-colors hover:border-emerald-300 hover:bg-emerald-100/70">
+        <span className="grid size-11 shrink-0 place-items-center rounded-lg bg-white text-emerald-700 ring-1 ring-emerald-200" aria-hidden>
+          <svg viewBox="0 0 24 24" className="size-6" fill="none" stroke="currentColor" strokeWidth={1.8} strokeLinecap="round" strokeLinejoin="round">
+            <path d="M12 14l9-5-9-5-9 5 9 5Zm0 0v6m-5-8.2V17l5 3 5-3v-5.2" />
+          </svg>
+        </span>
+        <div className="min-w-0 flex-1">
+          <p className="font-semibold text-emerald-900">Plataran Sehat — Kementerian Kesehatan RI</p>
+          <p className="mt-0.5 text-sm leading-relaxed text-emerald-800">
+            Pelatihan daring resmi Kemenkes dan tempat pencatatan SKP tenaga medis untuk perpanjangan SIP. Daftar gratis.
+          </p>
+        </div>
+        <span className="whitespace-nowrap text-sm font-semibold text-emerald-800 group-hover:underline">Buka Plataran Sehat ↗</span>
+      </a>
+
       {!alumniAktif && (
         <div className="mb-8">
           <Pesan jenis="info">

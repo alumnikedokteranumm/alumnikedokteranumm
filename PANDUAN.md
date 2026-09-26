@@ -353,7 +353,7 @@ Setelah itu **online-kan ulang** website (kirim kode ke GitHub → Vercel memper
 
 ### 📚 Perpustakaan digital
 
-Sudah terisi 9 sumber gratis (PubMed, Cochrane, WHO, NICE, Plataran Sehat, MDCalc, dll.).
+Sudah terisi 8 sumber gratis (PubMed, Cochrane, WHO, NICE, MDCalc, dll.).
 Tambah/ubah di **Admin → Perpustakaan**. Hanya alumni terverifikasi yang bisa membuka halamannya.
 
 ### 🗂️ Arsip lulusan
