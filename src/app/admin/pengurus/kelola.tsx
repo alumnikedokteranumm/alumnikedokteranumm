@@ -50,7 +50,7 @@ function FormOrang({ jenis, awal, tutup }: { jenis: Jenis; awal?: Pengurus; tutu
             <span className="mb-1 block font-medium text-slate-700">Peran di {jenis.nama}</span>
             <Pilihan value={peran} onChange={(e) => setPeran(e.target.value)}>
               <option value="anggota">Anggota</option>
-              <option value="ketua">Ketua divisi</option>
+              <option value="ketua">Ketua Divisi</option>
             </Pilihan>
           </label>
         ) : jenis.tipe === "dewan" ? (
@@ -269,7 +269,7 @@ export function KelolaStruktur({ k, jumlah, periode }: { k: Kelompok; jumlah: nu
               </span>
             ),
             isi: <>
-              {d.ketua.map((o, i) => baris({ o, i, daftar: d.ketua, jenis, lencana: "Ketua divisi" }))}
+              {d.ketua.map((o, i) => baris({ o, i, daftar: d.ketua, jenis, lencana: "Ketua Divisi" }))}
               {d.anggota.map((o, i) => baris({ o, i, daftar: d.anggota, jenis, lencana: "Anggota" }))}
             </>,
           });

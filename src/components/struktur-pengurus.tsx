@@ -97,7 +97,7 @@ export function StrukturPengurus({ daftar }: { daftar: Pengurus[] }) {
                     <Avatar nama={o.nama} url={o.foto_url} ukuran="size-11" teks="text-sm" />
                     <div className="min-w-0">
                       <p className="font-semibold leading-snug text-slate-900">{o.nama}</p>
-                      <p className="text-xs font-medium uppercase tracking-wider text-merek-600">Ketua divisi</p>
+                      <p className="text-sm text-merek-700">Ketua Divisi</p>
                     </div>
                   </div>
                 ))}
